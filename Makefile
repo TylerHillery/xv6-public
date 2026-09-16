@@ -275,6 +275,11 @@ dist-test:
 	cd dist-test; $(MAKE) bochs || true
 	cd dist-test; $(MAKE) qemu
 
+XV6_LINUX_CFLAGS = -fno-pic -static -fno-builtin -fno-strict-aliasing -O2 -Wall -MD -ggdb -m32 -Werror -fno-omit-frame-pointer -fno-stack-protector -fno-pie -no-pie -Wno-error=infinite-recursion -Wno-error=array-bounds
+
+run:
+	$(MAKE) TOOLPREFIX= QEMU=qemu-system-i386 CFLAGS="$(XV6_LINUX_CFLAGS)" qemu-nox
+
 # update this rule (change rev#) when it is time to
 # make a new revision.
 tar:
@@ -283,4 +288,4 @@ tar:
 	cp dist/* dist/.gdbinit.tmpl /tmp/xv6
 	(cd /tmp; tar cf - xv6) | gzip >xv6-rev10.tar.gz  # the next one will be 10 (9/17)
 
-.PHONY: dist-test dist
+.PHONY: dist-test dist run
